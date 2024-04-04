@@ -51,7 +51,7 @@ def get_content(request, clave):
 
 
     try:
-        contenido = Contenido.objects.get(clave = clave)
+        """contenido = Contenido.objects.get(clave = clave)
         comentarios = contenido.comentario_set.all()
 
         # Preparo la respuesta
@@ -60,7 +60,18 @@ def get_content(request, clave):
             respuesta += "<p><b>" + comentario.titulo + "</b><br>" + comentario.cuerpo + "<br>" + comentario.fecha.strftime("%Y-%m-%d %H:%M:%S") +"</p>"
         
         respuesta += formulario_contenido + formulario_comentario
-        return HttpResponse(respuesta)
+        return HttpResponse(respuesta)"""
+        # Mandar la template contenido.html
+        contenido = Contenido.objects.get(clave = clave)
+        comentarios = contenido.comentario_set.all()
+        template = loader.get_template('contenido.html')
+        context = {
+            'contenido': contenido,
+            'comentarios': comentarios
+            
+        }
+        return HttpResponse(template.render(context, request))
+    
     except Contenido.DoesNotExist:
         raise Http404("No existe para contenido para " + clave)
     
@@ -85,3 +96,19 @@ def index(request):
         'contenidos': contenidos
     }
     return HttpResponse(template.render(context, request))
+
+
+
+
+
+
+
+
+
+class Counter():
+    def __init__(self):
+        self.count: int = 0
+
+    def increment(self):
+        self.count += 1
+        return self.count

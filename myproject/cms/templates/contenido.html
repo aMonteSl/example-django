@@ -1,0 +1,31 @@
+<div><h1> {{ contenido.valor }} </h1></div>
+
+{%for comentario in comentarios %}
+
+    <p><h>
+    {{ comentario.titulo }}
+    </h>
+    {{  comentario.cuerpo }}
+    {{ comentario.fecha }}
+    </p>
+
+
+{% endfor %}
+
+
+<hr>
+<form action="" method="POST">
+    Introduce el (nuevo) contenido para esta pagina:
+    <input type="text" name="valor">
+    <input type="submit" value="Enviar">
+
+</form>
+
+<hr>
+<form action="" method="POST">
+    Introduce un comentario para esta pagina: <br>
+    Titulo: <input type="text" name="titulo"> <br>
+    Cuerpo: <input type="text" name="cuerpo"> <br>
+    <input type="submit" value="Enviar">
+
+</form>
