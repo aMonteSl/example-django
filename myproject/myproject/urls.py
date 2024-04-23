@@ -20,8 +20,18 @@ from django.contrib.auth.views import LoginView
 
 
 urlpatterns = [
-    path("cms/", include("cms.urls")),
-    path("calc/", include('calc.urls')),
-    path("login", LoginView.as_view()),
-    path("admin/", admin.site.urls),
+    path(
+        "cms/",
+        include("cms.urls")),
+    path(
+        "calc/",
+        include('calc.urls')),
+    path(
+        "login",
+        LoginView.as_view(
+            redirect_authenticated_user=True,
+            next_page="/cms")),
+    path(
+        "admin/",
+        admin.site.urls),
 ]

@@ -32,7 +32,12 @@ formulario_comentario = """
 
 
 @csrf_exempt
-def get_content(request, clave):
+def exits_user(request):
+    return request.user.is_authenticated
+
+
+@csrf_exempt
+def manage_content(request, clave):
     if request.method == "PUT":
         valor = request.body.decode("utf-8")
         actualizar_contenido(request, clave, valor)
@@ -51,6 +56,13 @@ def get_content(request, clave):
                 contenido=c)
             com_db.save()
 
+
+@csrf_exempt
+def get_content(request, clave):
+    # Si el usuario no esta logeado, redirigir a la pagina de login
+    if exits_user(request):
+        manage_content(request, clave)
+
     try:
         # Mandar la template contenido.html
         contenido = Contenido.objects.get(clave=clave)
@@ -58,8 +70,8 @@ def get_content(request, clave):
         template = loader.get_template('contenido.html')
         context = {
             'contenido': contenido,
-            'comentarios': comentarios
-
+            'comentarios': comentarios,
+            'usuario': request.user.is_authenticated
         }
         return HttpResponse(template.render(context, request))
 
@@ -84,20 +96,26 @@ def index(request):
     template = loader.get_template('index.html')
     # Genero el contexto
     context = {
-        'contenidos': contenidos
+        'contenidos': contenidos,
+        'usuario': request.user.is_authenticated
     }
     return HttpResponse(template.render(context, request))
 
 
 def logged_users(request):
     if request.user.is_authenticated:
-        return HttpResponse("Estas logeado con el usuario " + request.user.username)
+        return HttpResponse(
+            "Estas logeado con el usuario " +
+            request.user.username)
     else:
-        return HttpResponse("No estas logeado. <a href='/admin'>Logueate aqui</a>")
+        return HttpResponse(
+            "No estas logeado. <a href='/admin'>Logueate aqui</a>")
+
 
 def logout_view(request):
     logout(request)
     return redirect("/cms/")
+
 
 class Counter():
     def __init__(self):

@@ -7,5 +7,5 @@ urlpatterns = [
     path('checklogin', views.logged_users),
     path('logout', views.logout_view),
     path('<str:clave>', views.get_content),
-    
+
 ]

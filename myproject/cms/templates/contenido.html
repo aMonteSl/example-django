@@ -1,3 +1,7 @@
+{% extends "base.html" %}
+
+{% block cuerpo %}
+
 <div><h1> {{ contenido.valor }} </h1></div>
 
 {%for comentario in comentarios %}
@@ -12,20 +16,25 @@
 
 {% endfor %}
 
+{% if usuario %}
+    <hr>
+    <form action="" method="POST">
+        Introduce el (nuevo) contenido para esta pagina:
+        <input type="text" name="valor">
+        <input type="submit" value="Enviar">
 
-<hr>
-<form action="" method="POST">
-    Introduce el (nuevo) contenido para esta pagina:
-    <input type="text" name="valor">
-    <input type="submit" value="Enviar">
+    </form>
 
-</form>
+    <hr>
+    <form action="" method="POST">
+        Introduce un comentario para esta pagina: <br>
+        Titulo: <input type="text" name="titulo"> <br>
+        Cuerpo: <input type="text" name="cuerpo"> <br>
+        <input type="submit" value="Enviar">
 
-<hr>
-<form action="" method="POST">
-    Introduce un comentario para esta pagina: <br>
-    Titulo: <input type="text" name="titulo"> <br>
-    Cuerpo: <input type="text" name="cuerpo"> <br>
-    <input type="submit" value="Enviar">
+    </form>
+{% else %}
+    <p>Para comentar, por favor <a href="/login">inicia sesion</a></p>
+{% endif %}
 
-</form>
+{% endblock %}

@@ -1,18 +1,24 @@
-<h1>Django CMS</h1>
+{% extends "base.html" %}
 
-{% load static %}
-<img src="{% static 'Logo_URJC.png' %}">
+{% block cuerpo %}
 
+    {% if contenidos %}
 
-{% if contenidos %}
+    <h1>Contenidos: </h1>
+    <ul>
+        {%for contenido in contenidos %}
+            <li><a href="/cms/{{ contenido.clave }}">{{ contenido.clave }}</a></li>
+        {% endfor %}
+    </ul>
 
-<h1>Contenidos: </h1>
-<ul>
-    {%for contenido in contenidos %}
-        <li><a href="/cms/{{ contenido.clave }}">{{ contenido.clave }}</a></li>
-    {% endfor %}
-</ul>
+    {% else %}
+        <h1>No hay contenidos todavia</h1>
+    {% endif %}
 
-{% else %}
-    <h1>No hay contenidos todavia</h1>
-{% endif %}
+    {% if not usuario %}
+
+    <p>Solo podras ver los comentarios en los contenidos, si desea comentar, por favor <a href="/login">inicia sesion</a></p>
+
+    {% endif %}
+
+{% endblock %}
