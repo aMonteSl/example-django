@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 import datetime
 from django.template import loader
 from django.contrib.auth import logout
+from .forms import ContenidoForm
 
 
 # Create your views here.
@@ -115,6 +116,23 @@ def logged_users(request):
 def logout_view(request):
     logout(request)
     return redirect("/cms/")
+
+
+def cms_new(request):
+    if request.method == 'POST':
+        form = ContenidoForm(request.POST)
+        # SI es valido y no esta en la base de datos
+        exits = Contenido.objects.filter(clave=request.POST['clave']).exists()
+        if form.is_valid() and not exits:
+            contenido = form.save()
+            # Estas dos lineas hacen lo mismo
+            # return redirect('/cms/{}'.format(contenido.clave))
+            return redirect('url_contenido', clave=contenido.clave)
+        else:
+            return HttpResponse("Error en el formulario")
+    else:        
+        form = ContenidoForm()
+        return render(request, 'new_content.html', {'form': form})
 
 
 class Counter():
